@@ -1,9 +1,7 @@
 const configRoutes = {
   home: '/',
-  following: '/Following',
-  upload: '/Upload',
-  search: '/Search',
-  nickname: '/@:nickname',
+  login: '/login',
+  report: '/report',
 };
 
 export default configRoutes;

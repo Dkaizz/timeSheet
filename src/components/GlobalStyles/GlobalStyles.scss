@@ -1,6 +1,7 @@
 @import 'normalize.css';
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400;500;600;700&display=swap');
 
+@import '~bootstrap/scss/bootstrap';
 :root {
   --primary: #fe2c55;
   --black: #000;
@@ -9,12 +10,12 @@
 
   //
   //
-  --default-layout-header-height: 60px;
+  --default-layout-header-height: 120px;
   --default-layout-width: 1150px;
 }
 
 html {
-  font-size: 62.5%;
+  //   font-size: 62.5%;
 }
 
 * {
@@ -24,7 +25,7 @@ html {
 }
 
 body {
-  font-size: 1.6rem;
+  font-size: 1rem;
   //   font-family: proxima-nova, sans-serif;
   // font-family: 'Nunito', sans-serif;
   //   font-family: ;
@@ -35,25 +36,6 @@ body {
   text-rendering: optimizeSpeed;
   color: var(--text_color);
   overflow-y: overlay;
-  .tippy-box {
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1.6rem;
-    line-height: 2.2rem;
-    background-color: rgba(84, 84, 84, 0.92);
-  }
-
-  .tippy-arrow {
-    color: rgba(84, 84, 84, 0.92);
-  }
-
-  .tippy-content {
-    padding: 8px 9px;
-  }
-
-  .tippy-box[data-placement^='bottom'] > .tippy-arrow:before {
-    top: -8px;
-  }
 }
 
 html *::-webkit-scrollbar {
