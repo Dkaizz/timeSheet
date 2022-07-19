@@ -1,6 +1,6 @@
-# TimeSheet gọi API từ JsonServer
+## TimeSheet gọi API từ JsonServer
 
-# Chạy npx json-server --watch db.json --port 3004
+## Chạy npx json-server --watch db.json --port 3004
 
 # Getting Started with Create React App
 
