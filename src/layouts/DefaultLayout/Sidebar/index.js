@@ -8,57 +8,93 @@ import styled from 'styled-components';
 import { requestUser } from '~/apiServices/userServices';
 import { useValueContext } from '~/hooks';
 import { storage } from '~/utils/storage';
+const AsideStyled = styled.aside`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+const SidebarStyled = styled.div`
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(195deg, rgb(66, 66, 74), rgb(25, 25, 25));
+  color: #fff;
+  border-radius: 0.75rem;
+  padding: 10px;
+`;
 
+const ImageStyledAvatar = styled(Image)`
+  width: 60px;
+  height: 60px;
+  border: 2px solid #f4f4f4;
+  border-radius: 50%;
+`;
+
+const LinkStyled = styled(Link)`
+  color: #fff;
+  display: flex;
+  align-items: center;
+  margin: 0.09375rem 0;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  width: 100%;
+  font-size: 0.75rem;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+  }
+`;
+const ButtonStyledLogout = styled.button`
+  width: 100%;
+  font-size: 0.75rem;
+
+  color: #fff;
+  margin: 0.09375rem 0;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  outline: none;
+  background-color: transparent;
+  text-align: left;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+`;
+
+const IconStyled = styled(FontAwesomeIcon)`
+  margin-right: 10px;
+`;
 function Sidebar() {
+  const BtnStyledWithTimer = styled(LinkStyled)`
+    ${document.URL === 'http://localhost:3000/' ? 'background: linear-gradient(195deg, rgb(73, 163, 241), rgb(26, 115, 232));' : ''};
+  `;
+  const BtnStyledWithReport = styled(LinkStyled)`
+    ${document.URL === 'http://localhost:3000/report' ? 'background: linear-gradient(195deg, rgb(73, 163, 241), rgb(26, 115, 232));' : ''};
+  `;
   const Ref = useRef();
-  const AsideStyled = styled.aside`
-    background-color: #f4f4f4;
-    width: 100%;
-    height: 100%;
-    border: 4px solid #333;
-    display: flex;
-    flex-direction: column;
-  `;
-  const DivStyledWithAcction = styled.div``;
 
-  const ImageStyledAvatar = styled(Image)`
-    width: 60px;
-    border: 4px solid #333;
-    border-radius: 50%;
-  `;
-  const SpanStyledWithTimer = styled.span`
-    border-bottom: ${document.URL === 'http://localhost:3000/' ? '2px solid #333' : 'none'};
-  `;
-  const SpanStyledWithReport = styled.span`
-    border-bottom: ${document.URL === 'http://localhost:3000/report' ? '2px solid #333' : 'none'};
-  `;
-  const ButtonStyledLogout = styled.button`
-    outline: none;
-    background-color: transparent;
-    text-align: left;
-  `;
-
-  const IconStyled = styled(FontAwesomeIcon)`
-    margin-right: 10px;
-  `;
+  const contextValue = useValueContext();
+  const currentUser = contextValue.userCurrent;
   const [user, setUser] = useState();
 
   useEffect(() => {
     // effect
-    console.log();
     const fetchApi = async () => {
       const resultUser = await requestUser();
-
-      setUser(resultUser);
+      currentUser.current = resultUser;
     };
-    fetchApi();
+    if (Object.keys(currentUser.current).length === 0) {
+      console.log('gọi api user');
+      fetchApi();
+    }
+
+    console.log('test', currentUser);
 
     return () => {
       // cleanup
     };
-  }, []);
-
-  const contextValue = useValueContext();
+  }, [currentUser.current]);
 
   const { setLoginStatus } = contextValue.login;
 
@@ -66,27 +102,31 @@ function Sidebar() {
     storage.set({ status: false });
     setLoginStatus(false);
   }
+  console.log('jjjj: ', currentUser);
 
   return (
-    <AsideStyled className="p-3" ref={Ref}>
-      <div className="d-flex  align-items-center">
-        <ImageStyledAvatar src={user && user[0].avatar} />
-        <h6 className="p-3">{user && user[0].username}</h6>
-      </div>
-      <div className="d-flex flex-column mt-3">
-        <Link to="/" className="py-2">
-          <IconStyled icon={faClock} />
-          <SpanStyledWithTimer>Timer</SpanStyledWithTimer>
-        </Link>
-        <Link to="/report" className="py-2">
-          <IconStyled icon={faChartBar} />
-          <SpanStyledWithReport>Report</SpanStyledWithReport>
-        </Link>
-        <ButtonStyledLogout onClick={handleLogOut} className="py-2">
-          <IconStyled icon={faSignOutAlt} />
-          Logout
-        </ButtonStyledLogout>
-      </div>
+    <AsideStyled className="py-2" ref={Ref}>
+      <SidebarStyled>
+        <div className="d-flex  align-items-center">
+          <ImageStyledAvatar src={currentUser.current.avatar} />
+          <h6 className="p-3">{currentUser.current.username}</h6>
+        </div>
+        <hr />
+        <div className="d-flex flex-column mt-3">
+          <BtnStyledWithTimer to="/" className="p-2">
+            <IconStyled icon={faClock} />
+            <span>Timer</span>
+          </BtnStyledWithTimer>
+          <BtnStyledWithReport to="/report" className="p-2">
+            <IconStyled icon={faChartBar} />
+            <span>Report</span>
+          </BtnStyledWithReport>
+          <ButtonStyledLogout onClick={handleLogOut} className="p-2">
+            <IconStyled icon={faSignOutAlt} />
+            Logout
+          </ButtonStyledLogout>
+        </div>
+      </SidebarStyled>
     </AsideStyled>
   );
 }

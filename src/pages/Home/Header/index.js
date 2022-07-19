@@ -1,4 +1,4 @@
-import { faCheck, faPlayCircle, faStopCircle, faTags } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faHome, faPlayCircle, faStopCircle, faTags } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -11,7 +11,52 @@ import tachmang from './tachmang';
 import './header.scss';
 import moment from 'moment';
 import HeaderWrapper from '~/components/HeaderWrapper';
+const DivStyledWithWrapperIcon = styled.div``;
 
+const PStyledWithTime = styled.p`
+  margin: 0 25px;
+`;
+const DivStyledWithBolockTag = styled.div`
+  display: none;
+  position: absolute;
+  min-width: 200px;
+  border: 1px solid #ccc;
+  background-color: #f4f4f4;
+
+  border-radius: 5px;
+  top: 100%;
+  right: 10px;
+  box-shadow: 0 15px 20px rgba(0, 0, 0, 0.3);
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: -10%;
+    right: 0;
+    height: 20px;
+    width: 100%;
+    background-color: transparent;
+  }
+`;
+
+const DivStyledWithTag = styled.div`
+  position: relative;
+  cursor: pointer;
+  padding: 10px;
+  &:hover ${DivStyledWithBolockTag} {
+    display: block;
+  }
+`;
+
+const ButtonStyled = styled.button`
+  width: 100%;
+  text-align: left;
+  padding: 5px;
+  background: transparent;
+  &:hover {
+    color: #0065ca;
+  }
+`;
 function Header() {
   const [displayStart, setDisplayStart] = useState('block');
   const [displayStop, setDisplayStop] = useState('none');
@@ -25,39 +70,13 @@ function Header() {
     margin: 0;
   `;
   const SpanStyledWithIconStart = styled.span`
+    cursor: pointer;
     display: ${displayStart};
   `;
   const SpanStyledWithIconStop = styled.span`
-    display: ${displayStop};
-  `;
-
-  const DivStyledWithWrapperIcon = styled.div``;
-
-  const PStyledWithTime = styled.p`
-    margin: 0 25px;
-  `;
-  const DivStyledWithBolockTag = styled.div`
-    display: none;
-    position: absolute;
-    min-width: 200px;
-    border: 3px solid #333;
-    background-color: #fff;
-  `;
-
-  const DivStyledWithTag = styled.div`
-    position: relative;
     cursor: pointer;
-    &:hover ${DivStyledWithBolockTag} {
-      display: block;
-    }
-  `;
 
-  const ButtonStyled = styled.button`
-    width: 100%;
-    text-align: left;
-    padding: 5px;
-    background: transparent;
-    border-bottom: 2px solid #333;
+    display: ${displayStop};
   `;
 
   const [stateTasksPromise, dispatch] = useStore();
@@ -89,6 +108,7 @@ function Header() {
       taskRunning.current = undefined;
       setCheckStart(false);
       setCheckEditable(true);
+      setTimer(0);
       if (resultTasks) {
         for (const item of resultTasks) {
           if (item.status === 0) {

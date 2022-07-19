@@ -10,6 +10,7 @@ function Provider({ children }) {
   const timePut = useRef('');
   const countItem = useRef(5);
   const [router, setRouter] = useState('home');
+  const userCurrent = useRef({});
 
   if (login.length === 0) {
     storage.set({ status: false });
@@ -32,6 +33,7 @@ function Provider({ children }) {
       router,
       setRouter,
     },
+    userCurrent,
   };
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }

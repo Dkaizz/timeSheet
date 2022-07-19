@@ -6,11 +6,36 @@ import { Button } from 'react-bootstrap';
 import { requestTags } from '~/apiServices/tagsServices';
 import { editDataInput, removeDataInput, setDataInput, useStore } from '~/store';
 
-import classNames from 'classnames/bind';
-import styles from './Home.module.scss';
 import { useValueContext } from '~/hooks';
 import Header from '~/pages/Home/Header';
-const cx = classNames.bind(styles);
+import {
+  ButtonStyledBtnTask,
+  DivSTyledMenuBody,
+  DivStyledMenuWrapper,
+  DivStyledNotification,
+  DivStyledTask,
+  DivStyledTaskItem,
+  DivStyledWrapper,
+  DivStyledwrapperItem,
+  DivStyledwrapperTask,
+  PStyledTime,
+} from './HomeStyled';
+import styled from 'styled-components';
+
+const DivStyledWrapperConten = styled.div`
+  padding-top: 10px;
+`;
+
+const DivStyledTitle = styled.div`
+  h6 {
+    display: inline-block;
+    margin-right: 20px;
+  }
+  input {
+    background-color: transparent;
+  }
+`;
+
 function Home() {
   const contextVale = useValueContext();
 
@@ -26,6 +51,10 @@ function Home() {
   const [limit, setLimit] = useState(5);
 
   const [infoFilter, setInfoFilter] = useState();
+  const [notifiDeleteTask, setNotifiDeleteTask] = useState('none');
+
+  const itemTaskDelete = useRef();
+
   useEffect(() => {
     // effect
     const fetchApi = async () => {
@@ -74,6 +103,7 @@ function Home() {
       // cleanup
     };
   }, [stateTasksPromise]);
+
   function handleStart(item) {
     setCheckStart(true);
     dispatch(
@@ -88,6 +118,7 @@ function Home() {
 
     dispatch(setDataInput());
   }
+
   function handleStop(item) {
     setCheckStart(false);
     dispatch(
@@ -107,13 +138,15 @@ function Home() {
   function handRemove(item) {
     dispatch(removeDataInput(item.id));
     dispatch(setDataInput());
+    setNotifiDeleteTask('none');
   }
 
-  function handleNotifi() {
-    notification.current.style.display = 'block';
+  function handleNotifi(item) {
+    setNotifiDeleteTask('block');
+    itemTaskDelete.current = item;
   }
   function handleClose() {
-    notification.current.style.display = 'none';
+    setNotifiDeleteTask('none');
   }
 
   function handleAddCount() {
@@ -131,9 +164,9 @@ function Home() {
           .map((arr, index) => {
             console.log('arr: ', arr);
             return (
-              <div key={index} className={cx('wrapper_item')}>
-                <p>{moment(arr[0].start_time).format('l')}</p>
-                <div className={cx('wrapper_task')}>
+              <DivStyledwrapperItem key={index}>
+                <PStyledTime>{moment(arr[0].start_time).format('l')}</PStyledTime>
+                <DivStyledwrapperTask>
                   {arr.map((item, index2) => {
                     const arrTag = [];
                     for (let tag of tags) {
@@ -145,60 +178,56 @@ function Home() {
                     }
 
                     return (
-                      <div key={index2} className={cx('task')}>
+                      <DivStyledTask key={index2}>
                         <p>{item.description}</p>
-                        <div className={cx('task_item')}>
+                        <DivStyledTaskItem>
                           {arrTag.map((tag, id) => {
-                            return <span key={id}>{tag}</span>;
+                            if (id > 0) {
+                              return <span key={id}>- {tag} </span>;
+                            } else {
+                              return <span key={id}> {tag} </span>;
+                            }
                           })}
-                        </div>
-                        <div className={cx('task_item')}>
+                        </DivStyledTaskItem>
+                        <DivStyledTaskItem>
                           <span>{moment(item.start_time).format('LT')}</span>
                           {item.status === 1 && <span> - {moment(item.end_time).format('LT')}</span>}
-                        </div>
-                        <div className={cx('task_item')}>{item.status === 1 ? <span>{item.time_spent}</span> : <span>Running</span>}</div>
-                        <span className={cx('menu_wrapper')}>
+                        </DivStyledTaskItem>
+                        <DivStyledTaskItem>{item.status === 1 ? <span>{item.time_spent}</span> : <span>Running</span>}</DivStyledTaskItem>
+                        <DivStyledMenuWrapper>
                           <FontAwesomeIcon icon={faEllipsisV} />
-                          <div className={cx('menu_body')}>
+                          <DivSTyledMenuBody>
                             {item.status === 0 ? (
-                              <Button className={cx('btn_task')} onClick={() => handleStop(item)}>
-                                Stop
-                              </Button>
+                              <ButtonStyledBtnTask onClick={() => handleStop(item)}>Stop</ButtonStyledBtnTask>
                             ) : checkStart ? (
-                              <Button className={cx('btn_task')} disabled>
-                                Start
-                              </Button>
+                              <ButtonStyledBtnTask disabled>Start</ButtonStyledBtnTask>
                             ) : (
-                              <Button className={cx('btn_task')} onClick={() => handleStart(item)}>
-                                Start
-                              </Button>
+                              <ButtonStyledBtnTask onClick={() => handleStart(item)}>Start</ButtonStyledBtnTask>
                             )}
-                            <Button className={cx('btn_task')} onClick={handleNotifi}>
-                              Delete
-                            </Button>
-                          </div>
-                        </span>
-                        <div className={cx('notification')} ref={notification}>
+                            <ButtonStyledBtnTask onClick={handleNotifi}>Delete</ButtonStyledBtnTask>
+                          </DivSTyledMenuBody>
+                        </DivStyledMenuWrapper>
+                        <DivStyledNotification ref={notification} display={notifiDeleteTask}>
                           <p>Confirmation</p>
                           <p>Are you sure to delete this item?</p>
                           <div>
                             <Button onClick={handleClose}>No</Button>
                             <Button onClick={() => handRemove(item)}>Yes</Button>
                           </div>
-                        </div>
-                      </div>
+                        </DivStyledNotification>
+                      </DivStyledTask>
                     );
                   })}
-                </div>
-              </div>
+                </DivStyledwrapperTask>
+              </DivStyledwrapperItem>
             );
           });
       } else {
         return tasks.slice(0, limit).map((arr, index) => {
           return (
-            <div key={index} className={cx('wrapper_item')}>
-              <p>{moment(arr[0].start_time).format('l')}</p>
-              <div className={cx('wrapper_task')}>
+            <DivStyledwrapperItem key={index}>
+              <PStyledTime>{moment(arr[0].start_time).format('l')}</PStyledTime>
+              <DivStyledwrapperTask>
                 {arr.map((item, index2) => {
                   const arrTag = [];
                   for (let tag of tags) {
@@ -210,52 +239,48 @@ function Home() {
                   }
 
                   return (
-                    <div key={index2} className={cx('task')}>
+                    <DivStyledTask key={index2}>
                       <p>{item.description}</p>
-                      <div className={cx('task_item')}>
+                      <DivStyledTaskItem>
                         {arrTag.map((tag, id) => {
-                          return <span key={id}>{tag}</span>;
+                          if (id > 0) {
+                            return <span key={id}>- {tag} </span>;
+                          } else {
+                            return <span key={id}> {tag} </span>;
+                          }
                         })}
-                      </div>
-                      <div className={cx('task_item')}>
+                      </DivStyledTaskItem>
+                      <DivStyledTaskItem>
                         <span>{moment(item.start_time).format('LT')}</span>
                         {item.status === 1 && <span> - {moment(item.end_time).format('LT')}</span>}
-                      </div>
-                      <div className={cx('task_item')}>{item.status === 1 ? <span>{item.time_spent}</span> : <span>Running</span>}</div>
-                      <span className={cx('menu_wrapper')}>
+                      </DivStyledTaskItem>
+                      <DivStyledTaskItem>{item.status === 1 ? <span>{item.time_spent}</span> : <span>Running</span>}</DivStyledTaskItem>
+                      <DivStyledMenuWrapper>
                         <FontAwesomeIcon icon={faEllipsisV} />
-                        <div className={cx('menu_body')}>
+                        <DivSTyledMenuBody>
                           {item.status === 0 ? (
-                            <Button className={cx('btn_task')} onClick={() => handleStop(item)}>
-                              Stop
-                            </Button>
+                            <ButtonStyledBtnTask onClick={() => handleStop(item)}>Stop</ButtonStyledBtnTask>
                           ) : checkStart ? (
-                            <Button className={cx('btn_task')} disabled>
-                              Start
-                            </Button>
+                            <ButtonStyledBtnTask disabled>Start</ButtonStyledBtnTask>
                           ) : (
-                            <Button className={cx('btn_task')} onClick={() => handleStart(item)}>
-                              Start
-                            </Button>
+                            <ButtonStyledBtnTask onClick={() => handleStart(item)}>Start</ButtonStyledBtnTask>
                           )}
-                          <Button className={cx('btn_task')} onClick={handleNotifi}>
-                            Delete
-                          </Button>
-                        </div>
-                      </span>
-                      <div className={cx('notification')} ref={notification}>
-                        <p>Confirmation</p>
+                          <ButtonStyledBtnTask onClick={() => handleNotifi(item)}>Delete</ButtonStyledBtnTask>
+                        </DivSTyledMenuBody>
+                      </DivStyledMenuWrapper>
+                      <DivStyledNotification ref={notification} display={notifiDeleteTask}>
+                        <h6>Confirmation</h6>
                         <p>Are you sure to delete this item?</p>
                         <div>
-                          <Button onClick={handleClose}>No</Button>
-                          <Button onClick={() => handRemove(item)}>Yes</Button>
+                          <button onClick={handleClose}>No</button>
+                          <button onClick={() => handRemove(itemTaskDelete.current)}>Yes</button>
                         </div>
-                      </div>
-                    </div>
+                      </DivStyledNotification>
+                    </DivStyledTask>
                   );
                 })}
-              </div>
-            </div>
+              </DivStyledwrapperTask>
+            </DivStyledwrapperItem>
           );
         });
       }
@@ -263,16 +288,17 @@ function Home() {
   }
 
   return (
-    <div>
+    <DivStyledWrapper>
       <Header />
-
-      <div className={cx('header')}>
-        <h6>Data filter</h6>
-        <input type="date" onChange={handleFilter} />
-      </div>
-      <div>{renderTask()}</div>
-      <div>{tasks ? tasks.length > limit ? <Button onClick={handleAddCount}>Load</Button> : undefined : undefined}</div>
-    </div>
+      <DivStyledWrapperConten>
+        <DivStyledTitle>
+          <h6>Data filter:</h6>
+          <input type="date" onChange={handleFilter} />
+        </DivStyledTitle>
+        <div>{renderTask()}</div>
+        <div>{tasks ? tasks.length > limit ? <Button onClick={handleAddCount}>Load</Button> : undefined : undefined}</div>
+      </DivStyledWrapperConten>
+    </DivStyledWrapper>
   );
 }
 
