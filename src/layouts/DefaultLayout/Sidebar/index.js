@@ -75,41 +75,20 @@ function Sidebar() {
   const Ref = useRef();
 
   const contextValue = useValueContext();
-  const currentUser = contextValue.userCurrent;
-  const [user, setUser] = useState();
-
-  useEffect(() => {
-    // effect
-    const fetchApi = async () => {
-      const resultUser = await requestUser();
-      currentUser.current = resultUser;
-    };
-    if (Object.keys(currentUser.current).length === 0) {
-      console.log('gọi api user');
-      fetchApi();
-    }
-
-    console.log('test', currentUser);
-
-    return () => {
-      // cleanup
-    };
-  }, [currentUser.current]);
 
   const { setLoginStatus } = contextValue.login;
 
   function handleLogOut() {
-    storage.set({ status: false });
+    storage.set({ status: false, avatar: '', userName: '' });
     setLoginStatus(false);
   }
-  console.log('jjjj: ', currentUser);
 
   return (
     <AsideStyled className="py-2" ref={Ref}>
       <SidebarStyled>
         <div className="d-flex  align-items-center">
-          <ImageStyledAvatar src={currentUser.current.avatar} />
-          <h6 className="p-3">{currentUser.current.username}</h6>
+          <ImageStyledAvatar src={storage.get().avatar} />
+          <h6 className="p-3">{storage.get().userName}</h6>
         </div>
         <hr />
         <div className="d-flex flex-column mt-3">

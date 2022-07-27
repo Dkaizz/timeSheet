@@ -95,7 +95,6 @@ function Login() {
   const inputPasswordRef = useRef();
 
   const contextValue = useValueContext();
-  const currentUser = contextValue.userCurrent;
   const navigate = useNavigate();
   const { loginStatus, setLoginStatus } = contextValue.login;
 
@@ -122,10 +121,8 @@ function Login() {
         if (inputUserNameRef.current.value !== user[0].username || inputPasswordRef.current.value !== user[0].password) {
           setTextError('Tài khoản hoặc mật khẩu không đúng');
         } else {
-          currentUser.current = user[0];
-          console.log('llllgshhhh: ' + currentUser.current.name);
           setLoginStatus(true);
-          storage.set({ status: true });
+          storage.set({ status: true, userName: user[0].username, avatar: user[0].avatar });
           navigate('/');
         }
       }
