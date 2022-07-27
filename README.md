@@ -1,76 +1,53 @@
 ## TimeSheet gọi API từ JsonServer
 
 ## Chạy npx json-server --watch db.json --port 3004
+ 
+### Time tracker
+Xây dựng ứng dụng bằng ReactJS để theo dõi & tổng hợp timesheet
 
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- Dũng React Create App để tạo dự án React.
+- Sử dụng router để chuyển giữa các trang
+- giữ được trạng thái đăng nhập (lưu local storage), dù có refresh trang hay đóng trang rồi mở lại thì trạng thái vẫn phải được giữ
 
-## Available Scripts
+### Mô tả
+- Login: Khi vào ứng dụng, định hệ thống sẽ kiểm tra xem user đã đăng nhập chưa, nếu chưa thì hiển thị trang đăng nhập, nếu rồi thì chuyển đến trang timer-
 
-In the project directory, you can run:
+- Timer
++ Người dùng có thể click vào chỗ có chữ `that are you working on?` để nhập mô tả task
 
-### `npm start`
++ Người dùng có thể click lên biểu tượng `tag` để chọn các tag có trong hệ thống.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
++ Mặc định thời gian sẽ là 00:00:00, bấm vào nút Start bắt đầu, nút Stop dừng lại.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
++ Bấm vào nút Start thì task ngay lập tức được tạo ra ở bên dưới.
 
-### `npm test`
++ Bấm xoá task thì hiển thị hộp thoại xác nhận, yes thì xoá khỏi hệ thống
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
++ Trang listting nhóm các task lại cùng ngyaf với nhau 
 
-### `npm run build`
++ Mặc định hiển thị 5 nhóm ngày, bấm load more để tải thêm
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
++ Có thể chọn ngày cụ thể để xem các task
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Report:
++ Hiển thị biểu đồ, biểu diễn số giờ đã bỏ ra để làm các task.
++ Sử dụng [Donnut chart](https://wwa.chartjs.org/docs/next/charts/doughnut.html) để hiển thị tổng số giờ đã dùng chia theo % của từng tag (mỗi tag 1 màu)
++ Sử dụng [Barchart](https://www.chartjs-org/đocs/next/charts/bar.htm1#horizonta1-bar-chart) để hiển thị tổng số giờ đã dùng chia theo từng tag (mỗi tag 1 màu)
++ Cho phép người dùng lọc theo các tiêu chí:
+  + Ngày hiện tại
+  + Tuần hiện tại
+  + Ngày hôm qua
+  + Tuần trước
+  + Tháng hiện tại
+  + Tháng Trước
+  + Tuỳ chọn ngày bắt đầu & kết thúc
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Kiến thức áp dụng
 
-### `npm run eject`
+- Sử dụng React bootstra, styled
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Sử dụng các hàm cộng trừ/chuyển đổi ngày tháng. Tham khảo `momentjs`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Thao tác đữ liệu dạng `CRUD` (Create - Read - Update - Delete) thông qua Restful APT
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-# web-base
