@@ -1,5 +1,6 @@
 import { Button } from 'react-bootstrap';
 import styled from 'styled-components';
+import { devices } from '~/responsive/responsive';
 
 export const DivStyledWrapper = styled.div``;
 
@@ -7,6 +8,9 @@ export const DivStyledwrapperItem = styled.div`
   margin-bottom: 20px;
   display: flex;
   align-items: center;
+  @media ${devices.mobileL} {
+    flex-direction: column;
+  }
 `;
 export const DivStyledwrapperTask = styled.div`
   padding: 10px;
@@ -25,6 +29,8 @@ export const DivStyledTask = styled.div`
   p {
     margin: 0;
     flex: 1;
+    max-width: 100px;
+    overflow-wrap: break-word;
   }
 `;
 
@@ -100,6 +106,7 @@ export const DivStyledNotification = styled.div.attrs(({ display }) => {
 
   p {
     padding-bottom: 10px;
+    max-width: unset;
   }
 
   button {

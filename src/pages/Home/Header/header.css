@@ -1,0 +1,20 @@
+.icon-check {
+  display: none;
+}
+
+.tag_active .icon-check {
+  display: inline-block;
+}
+
+.text {
+  outline: none;
+  width: 250px;
+  max-height: 80px;
+  overflow: auto;
+  margin: 0;
+}
+
+.text::-webkit-scrollbar {
+  display: none;
+}
+/*# sourceMappingURL=header.css.map */

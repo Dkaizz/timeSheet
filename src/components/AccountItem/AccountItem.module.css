@@ -1,0 +1,45 @@
+.wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 6px 16px;
+  cursor: pointer;
+}
+
+.wrapper:hover {
+  background: rgba(22, 24, 35, 0.03);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.info {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  margin-left: 12px;
+}
+
+.name {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.check {
+  margin-left: 6px;
+  color: #20d5ec;
+}
+
+.username {
+  font-size: 1.4rem;
+  color: rgba(22, 24, 35, 0.5);
+}
+/*# sourceMappingURL=AccountItem.module.css.map */

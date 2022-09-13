@@ -11,6 +11,24 @@ import HeaderWrapper from '~/components/HeaderWrapper';
 import { useStore } from '~/store';
 import tachmang from './tachmang';
 
+const IconStyled = styled(FontAwesomeIcon)`
+  cursor: pointer;
+
+  position: absolute;
+  top: 5%;
+  right: 5%;
+`;
+
+const DivStyled = styled.div`
+  position: relative;
+  padding: 20px;
+  background-color: #f4f4f4;
+`;
+
+const DivContainerStyled = styled.div`
+  margin-top: 70px;
+`;
+
 function Report() {
   const [checkDateRange, setCheckDateRange] = useState('none');
 
@@ -23,20 +41,6 @@ function Report() {
     right: 0;
     left: 0;
     bottom: 0;
-  `;
-
-  const IconStyled = styled(FontAwesomeIcon)`
-    cursor: pointer;
-
-    position: absolute;
-    top: 5%;
-    right: 5%;
-  `;
-
-  const DivStyled = styled.div`
-    position: relative;
-    padding: 20px;
-    background-color: #f4f4f4;
   `;
 
   const [stateTasksPromise, dispatch] = useStore();
@@ -79,19 +83,21 @@ function Report() {
       if (tasks.length > 0) {
         for (let task of tasks) {
           if (task.tags.includes(tag.id)) {
-            const arrTime = task.time_spent.split(' ');
-            const arrsaukhitach = tachmang(arrTime, 2);
-            const obj = {};
+            if (task.time_spent) {
+              const arrTime = task.time_spent.split(' ');
+              const arrsaukhitach = tachmang(arrTime, 2);
+              const obj = {};
 
-            for (const arr of arrsaukhitach) {
-              obj[arr[1]] = arr[0];
+              for (const arr of arrsaukhitach) {
+                obj[arr[1]] = arr[0];
+              }
+              let hour = obj.hour ? obj.hour * 3600 : 0;
+              let minute = obj.mins ? obj.mins * 60 : 0;
+              let second = obj.seconds ? obj.seconds : 0;
+
+              let time = Number(hour) + Number(minute) + Number(second);
+              timeTag.current += time;
             }
-            let hour = obj.hour ? obj.hour * 3600 : 0;
-            let minute = obj.mins ? obj.mins * 60 : 0;
-            let second = obj.seconds ? obj.seconds : 0;
-
-            let time = Number(hour) + Number(minute) + Number(second);
-            timeTag.current += time;
           }
         }
       }
@@ -223,10 +229,10 @@ function Report() {
   }
   return (
     <div>
-      <HeaderWrapper>
+      <HeaderWrapper type="report">
         <h3>Productivity report</h3>
       </HeaderWrapper>
-      <div>
+      <DivContainerStyled>
         <div>
           <div className="d-flex align-items-center justify-content-between">
             <h3>
@@ -244,15 +250,15 @@ function Report() {
             </select>
           </div>
           <Row>
-            <Col lg={4}>
+            <Col md={4}>
               <Doughnut dataTime={dataTime} />
             </Col>
-            <Col lg={8}>
+            <Col md={8}>
               <BarChart dataTime={dataTime} />
             </Col>
           </Row>
         </div>
-      </div>
+      </DivContainerStyled>
       <DivStyledWithDateRange>
         <DivStyled className="d-flex flex-column align-items-center">
           <IconStyled icon={faTimes} onClick={handleClose} />

@@ -12,6 +12,9 @@ function Provider({ children }) {
   const [router, setRouter] = useState('home');
   const userCurrent = useRef({});
 
+  const [isSideBar, setIsSideBar] = useState('none');
+  const [isAddTask, setIsAddTask] = useState('none');
+
   if (login.length === 0) {
     storage.set({ status: false });
     setLoginStatus(false);
@@ -34,6 +37,11 @@ function Provider({ children }) {
       setRouter,
     },
     userCurrent,
+    sideBar: {
+      isSideBar,
+      setIsSideBar,
+    },
+    addTask: { isAddTask, setIsAddTask },
   };
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }

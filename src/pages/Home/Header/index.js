@@ -11,6 +11,7 @@ import tachmang from './tachmang';
 import './header.scss';
 import moment from 'moment';
 import HeaderWrapper from '~/components/HeaderWrapper';
+import { devices } from '~/responsive/responsive';
 const DivStyledWithWrapperIcon = styled.div``;
 
 const PStyledWithTime = styled.p`
@@ -27,6 +28,9 @@ const DivStyledWithBolockTag = styled.div`
   top: 100%;
   right: 10px;
   box-shadow: 0 15px 20px rgba(0, 0, 0, 0.3);
+  @media ${devices.mobileL} {
+    right: unset;
+  }
 
   &:after {
     content: '';
@@ -96,6 +100,7 @@ function Header() {
 
   useEffect(() => {
     dispatch(setDataInput());
+
     return () => {
       // cleanup
     };
@@ -113,7 +118,6 @@ function Header() {
         for (const item of resultTasks) {
           if (item.status === 0) {
             setCheckEditable(false);
-            console.log('arrTask:', item.time_spent);
             setCheckStart(true);
             setNameTask(item.description);
             taskRunning.current = item;
@@ -130,7 +134,6 @@ function Header() {
               let second = obj.seconds ? obj.seconds : 0;
 
               let time = Number(hour) + Number(minute) + Number(second);
-              console.log('time của cái đang run:', time);
               setTimer(time);
             }
           }
@@ -183,14 +186,19 @@ function Header() {
           status: 0,
         })
       );
+
+      tagPostRef.current = [];
+      checkTagPost.current = false;
     }
     setNameTask(textRef.current.innerText);
     setTimeout(() => {
       dispatch(setDataInput());
     }, 0);
-    console.log('text: ', textRef.current.innerText);
   }
   const handleStop = () => {
+    console.log('tagPostRef.current: ');
+    console.log(tagPostRef.current);
+
     if (textRef.current.innerText !== 'What are you working on?') {
       setCheckStart(false);
 
@@ -244,9 +252,12 @@ function Header() {
             }
           }
         } else {
+          console.log('thêm 1');
           tagPostRef.current.push(Number(value));
         }
         if (checkTagPost.current) {
+          console.log('thêm 2');
+
           tagPostRef.current.push(Number(value));
         }
       } else {
@@ -259,6 +270,8 @@ function Header() {
           }
         }
       }
+
+      console.log('tagPostRef: ' + tagPostRef.current);
     }
   }
 

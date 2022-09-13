@@ -4,16 +4,35 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
 import { Button, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { requestUser } from '~/apiServices/userServices';
 import { useValueContext } from '~/hooks';
+import { devices } from '~/responsive/responsive';
 import { storage } from '~/utils/storage';
+
+const breatheAnimation = keyframes`
+ to{
+    transform:translateX(0%);
+    opacity:1;
+ }
+ from{
+    opacity:0;
+    transform:translateX(-100%);
+ }
+`;
 const AsideStyled = styled.aside`
   width: 100%;
-  height: 100%;
+  height: 100vh;
+
   display: flex;
   flex-direction: column;
+  animation: ${breatheAnimation} ease-in 0.4s;
+  @media ${devices.mobileL} {
+    padding: 0px !important;
+    height: 100%;
+  }
 `;
+
 const SidebarStyled = styled.div`
   width: 100%;
   height: 100%;
@@ -21,6 +40,9 @@ const SidebarStyled = styled.div`
   color: #fff;
   border-radius: 0.75rem;
   padding: 10px;
+  @media ${devices.mobileL} {
+    border-radius: 0;
+  }
 `;
 
 const ImageStyledAvatar = styled(Image)`
@@ -77,8 +99,11 @@ function Sidebar() {
   const contextValue = useValueContext();
 
   const { setLoginStatus } = contextValue.login;
+  const { isSideBar, setIsSideBar } = contextValue.sideBar;
 
   function handleLogOut() {
+    setIsSideBar('none');
+
     storage.set({ status: false, avatar: '', userName: '' });
     setLoginStatus(false);
   }
@@ -92,11 +117,23 @@ function Sidebar() {
         </div>
         <hr />
         <div className="d-flex flex-column mt-3">
-          <BtnStyledWithTimer to="/" className="p-2">
+          <BtnStyledWithTimer
+            to="/"
+            className="p-2"
+            onClick={() => {
+              setIsSideBar('none');
+            }}
+          >
             <IconStyled icon={faClock} />
             <span>Timer</span>
           </BtnStyledWithTimer>
-          <BtnStyledWithReport to="/report" className="p-2">
+          <BtnStyledWithReport
+            to="/report"
+            className="p-2"
+            onClick={() => {
+              setIsSideBar('none');
+            }}
+          >
             <IconStyled icon={faChartBar} />
             <span>Report</span>
           </BtnStyledWithReport>

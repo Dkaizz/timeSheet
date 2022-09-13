@@ -21,12 +21,17 @@ import {
   PStyledTime,
 } from './HomeStyled';
 import styled from 'styled-components';
+import { devices } from '~/responsive/responsive';
 
 const DivStyledWrapperConten = styled.div`
   padding-top: 10px;
+  @media ${devices.mobileL} {
+    margin-top: 70px;
+  }
 `;
 
 const DivStyledTitle = styled.div`
+  margin-bottom: 10px;
   h6 {
     display: inline-block;
     margin-right: 20px;
@@ -296,7 +301,9 @@ function Home() {
           <input type="date" onChange={handleFilter} />
         </DivStyledTitle>
         <div>{renderTask()}</div>
-        <div>{tasks ? tasks.length > limit ? <Button onClick={handleAddCount}>Load</Button> : undefined : undefined}</div>
+        <div className="d-flex justify-content-center align-items-center p-4">
+          {tasks ? tasks.length > limit ? <Button onClick={handleAddCount}>Load</Button> : undefined : undefined}
+        </div>
       </DivStyledWrapperConten>
     </DivStyledWrapper>
   );
